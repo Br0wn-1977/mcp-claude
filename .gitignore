@@ -1,0 +1,33 @@
+# =============================================================================
+# MCP Veille V3 - .gitignore
+# =============================================================================
+
+# Environnement Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+
+# Variables d'environnement (IMPORTANT: contient les clés API)
+.env
+
+# Base de données SQLite (sera créée en Phase 2)
+data/*.db
+
+# Rapports générés (peuvent être volumineux)
+data/rapports/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

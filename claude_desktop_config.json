@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "veille-system": {
+      "command": "python",
+      "args": [
+        "C:\\Users\\lemai\\OneDrive\\Bureau\\VSC\\MCP v2\\src\\veille_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:\\Users\\lemai\\OneDrive\\Bureau\\VSC\\MCP v2"
+      }
+    }
+  }
+}

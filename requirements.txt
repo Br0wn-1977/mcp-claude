@@ -1,0 +1,14 @@
+# MCP SDK - Le cœur du protocole
+mcp>=1.0.0
+
+# Gestion des variables d'environnement
+python-dotenv>=1.0.0
+
+# Requêtes HTTP pour NewsAPI et GitHub
+requests>=2.31.0
+
+# Parsing RSS (Phase 3)
+feedparser>=6.0.0
+
+# Client Anthropic pour l'analyse (Phase 3)
+anthropic>=0.40.0
