@@ -1,73 +1,210 @@
-# 🎯 MCP Veille V3 - Système de Veille Technologique
+# 🔍 MCP Veille V3
 
-## Vision du Projet
+Système de veille technologique automatisé basé sur le protocole MCP (Model Context Protocol) d'Anthropic.
 
-Ce projet implémente un **vrai serveur MCP** (Model Context Protocol) pour la veille technologique, permettant d'interagir avec Claude Desktop en langage naturel.
+![Version](https://img.shields.io/badge/version-3.0-blue)
+![Python](https://img.shields.io/badge/python-3.10+-green)
+![MCP](https://img.shields.io/badge/MCP-1.0+-purple)
 
-**Exemple de conversation possible :**
-```
-Toi: "Lance une veille sur Claude et Anthropic des 7 derniers jours"
-Claude: [utilise l'outil MCP lancer_veille] "J'ai trouvé 12 articles..."
+## 📋 Description
 
-Toi: "Garde le premier article dans mes favoris"  
-Claude: [utilise l'outil MCP ajouter_favori] "Article ajouté à vos favoris"
+MCP Veille V3 permet de surveiller l'actualité technologique via deux interfaces complémentaires :
+- **Claude Desktop** : Interaction en langage naturel pour lancer des veilles et analyses
+- **Dashboard Streamlit** : Interface web pour visualiser et gérer les données
 
-Toi: "Montre-moi tous mes favoris"
-Claude: [lit la ressource MCP veille://favoris] "Vous avez 5 favoris..."
-```
+Le système collecte des articles depuis NewsAPI et 7 flux RSS, permet des analyses IA à la demande, et offre une gestion complète des favoris avec export Markdown.
 
-## Architecture
+## ✨ Fonctionnalités
 
-```
-mcp-veille-v3/
-├── src/
-│   └── veille_server.py      # Serveur MCP principal
-├── data/
-│   ├── veille.db             # Base SQLite (favoris, rapports, config)
-│   └── rapports/             # Rapports générés
-├── tests/
-│   └── test_server.py        # Tests du serveur
-├── .env                      # Clés API (NEWS_API_KEY, ANTHROPIC_API_KEY)
-├── requirements.txt          # Dépendances Python
-└── README.md                 # Ce fichier
-```
+### Collecte d'information
+- 🎯 **6 thématiques préconfigurées** (3 IA + 3 Professionnel)
+- 📡 **7 flux RSS** de sources de qualité
+- 🔍 **Recherche libre** sur n'importe quel sujet
 
-## Installation
+### Analyse et rapports
+- 🤖 **Analyse Claude** à la demande (synthèse, points clés, recommandations)
+- 📄 **Génération de rapports** structurés
 
-### 1. Créer l'environnement
-```powershell
-cd "C:\Users\lemai\OneDrive\Bureau\VSC\MCP v2"
+### Gestion des favoris
+- ⭐ Sauvegarde d'articles avec tags
+- 📥 **Export Markdown** des favoris
+- ☆/⭐ Indicateur visuel (étoile vide/pleine)
+
+### Dashboard
+- 📊 Statistiques d'utilisation
+- 📜 Historique des recherches avec filtres
+- 🗑️ Suppression d'historiques et rapports
+
+## 🚀 Installation rapide
+
+### Prérequis
+- Python 3.10+
+- Claude Desktop
+- Clés API : [NewsAPI](https://newsapi.org/) et [Anthropic](https://console.anthropic.com/)
+
+### Étapes
+
+```bash
+# 1. Créer l'environnement virtuel
 python -m venv venv
+
+# 2. Activer l'environnement
+# Windows PowerShell :
 .\venv\Scripts\Activate.ps1
+
+# 3. Installer les dépendances
+pip install mcp python-dotenv requests feedparser anthropic streamlit pandas
 ```
 
-### 2. Installer les dépendances
-```powershell
-pip install -r requirements.txt
+### Configuration
+
+1. Créer le fichier `.env` :
+```env
+NEWS_API_KEY=votre_cle_newsapi
+ANTHROPIC_API_KEY=votre_cle_anthropic
 ```
 
-### 3. Configurer les clés API
-Créer un fichier `.env` :
+2. Configurer Claude Desktop (`%APPDATA%\Claude\claude_desktop_config.json`) :
+```json
+{
+  "mcpServers": {
+    "veille-system": {
+      "command": "C:\\chemin\\vers\\projet\\venv\\Scripts\\python.exe",
+      "args": ["C:\\chemin\\vers\\projet\\src\\veille_server.py"],
+      "env": {"PYTHONPATH": "C:\\chemin\\vers\\projet"}
+    }
+  }
+}
 ```
-NEWS_API_KEY=ta_clé_newsapi
-ANTHROPIC_API_KEY=ta_clé_anthropic
+
+3. Redémarrer Claude Desktop
+
+### Lancer le Dashboard
+
+```bash
+streamlit run src/dashboard.py
 ```
 
-### 4. Tester le serveur
-```powershell
-python tests/test_server.py
+## 💬 Utilisation avec Claude Desktop
+
+### Commandes principales
+
+| Action | Exemple de commande |
+|--------|---------------------|
+| Voir les thématiques | "Quelles thématiques sont disponibles ?" |
+| Veille thématique | "Lance une veille sur Claude & Anthropic" |
+| Veille RSS | "Collecte les flux RSS des 3 derniers jours" |
+| Recherche libre | "Cherche des news sur quantum computing" |
+| Analyse | "Analyse les résultats" |
+| Rapport | "Génère un rapport complet" |
+| Favoris | "Ajoute l'article 1 à mes favoris" |
+
+### Thématiques disponibles
+
+**Bloc IA :**
+- Claude & Anthropic
+- Écosystème LLM
+- IA Europe & Réglementation
+
+**Bloc Professionnel :**
+- HR Tech & Formation
+- Agents IA & Automatisation
+- Open Source & Outils Dev
+
+## 📁 Structure du projet
+
+```
+MCP-Veille-V3/
+├── .env                    # Clés API (non versionné)
+├── README.md               # Ce fichier
+├── DOCUMENTATION.md        # Documentation complète
+├── RECAP_FONCTIONNALITES.md # Tableau récapitulatif
+│
+├── src/
+│   ├── veille_server.py    # Serveur MCP (9 outils)
+│   └── dashboard.py        # Dashboard Streamlit
+│
+├── data/
+│   └── veille.db           # Base SQLite
+│
+└── venv/                   # Environnement Python
 ```
 
-### 5. Configurer Claude Desktop
-Éditer `%APPDATA%\Claude\claude_desktop_config.json`
+## 🛠️ Outils MCP
 
-## Phases de Développement
+| Outil | Description |
+|-------|-------------|
+| `rechercher_actualites` | Recherche libre NewsAPI |
+| `lancer_veille_thematique` | Veille sur thématique préconfigurée |
+| `voir_thematiques` | Liste des thématiques |
+| `lancer_veille_rss` | Collecte flux RSS |
+| `analyser_resultats` | Analyse Claude |
+| `generer_rapport` | Création de rapport |
+| `ajouter_favori` | Ajout aux favoris |
+| `lister_favoris` | Liste des favoris |
+| `supprimer_favori` | Suppression de favori |
 
-- [x] Phase 1 : Socle minimal (1 outil, validation Claude Desktop)
-- [ ] Phase 2 : État persistant (SQLite, favoris)
-- [ ] Phase 3 : Veille complète (12 thématiques, RSS, ad-hoc)
-- [ ] Phase 4 : Raffinement (prompts, stats, dashboard)
+## 📡 Sources RSS
 
-## Licence
+| Catégorie | Sources |
+|-----------|---------|
+| IA & Acteurs majeurs | Hugging Face, Google AI, OpenAI |
+| Développeur & Open Source | Human Coders, GitHub, Hacker News |
+| Réglementation | CNIL |
 
-Projet personnel - Bruno
+## 📅 Séquencement hebdomadaire suggéré
+
+| Jour | Activité | Durée |
+|------|----------|-------|
+| Lundi | Veille RSS | 15-20 min |
+| Mardi | Bloc IA (3 thématiques) | 30-45 min |
+| Mercredi | Bloc PRO (3 thématiques) | 30-45 min |
+| Jeudi | Exploration libre | 15-60 min |
+| Vendredi | Consolidation dashboard | 20-30 min |
+
+## 🔧 Personnalisation
+
+### Ajouter une thématique
+
+Dans `src/veille_server.py`, ajouter au dictionnaire `THEMATIQUES` :
+
+```python
+"Nouvelle Thématique": {
+    "description": "Description",
+    "keywords": ["mot-clé 1", "mot-clé 2"],
+    "categorie": "IA"  # ou "PRO"
+},
+```
+
+### Ajouter un flux RSS
+
+Dans `src/veille_server.py`, ajouter au dictionnaire `RSS_FEEDS` :
+
+```python
+"Catégorie": [
+    {"name": "Nom", "url": "https://..."},
+],
+```
+
+## 🐛 Dépannage
+
+| Problème | Solution |
+|----------|----------|
+| "Server disconnected" | Vérifier le chemin Python dans la config Claude Desktop |
+| "Module not found" | Réinstaller les dépendances dans le venv |
+| Colonnes manquantes | Supprimer `data/veille.db` et redémarrer |
+
+Logs serveur : `%APPDATA%\Claude\logs\mcp-server-veille-system.log`
+
+## 📚 Documentation
+
+- [DOCUMENTATION.md](DOCUMENTATION.md) — Documentation complète
+- [RECAP_FONCTIONNALITES.md](RECAP_FONCTIONNALITES.md) — Tableau récapitulatif
+
+## 📄 Licence
+
+Projet personnel - Usage libre
+
+---
+
+*MCP Veille V3 - Décembre 2025*

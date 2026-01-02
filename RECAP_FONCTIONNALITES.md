@@ -45,14 +45,26 @@
 
 ## Pages du Dashboard Streamlit
 
-| Page | Fonction | Contenu |
-|------|----------|---------|
-| Dashboard | Vue d'ensemble | Statistiques globales, derniers favoris, activité récente, liste des thématiques |
-| Favoris | Gestion des favoris | Liste complète avec recherche, visualisation détaillée, suppression |
-| Historique | Suivi des recherches | Tableau de toutes les recherches avec filtres par type |
-| Rapports | Consultation des rapports | Liste des rapports générés, visualisation du contenu et de l'analyse |
-| Lancer une veille | Collecte RSS depuis le web | Interface pour lancer une collecte RSS (sans analyse Claude) |
-| Flux RSS | Configuration des sources | Liste des flux configurés avec test de fonctionnement |
+| Page | Fonction | Actions disponibles |
+|------|----------|---------------------|
+| 📊 Dashboard | Vue d'ensemble | Statistiques, derniers favoris, activité récente, thématiques |
+| ⭐ Favoris | Gestion des favoris | Recherche, visualisation, suppression, **export Markdown** |
+| 📜 Historique | Suivi des recherches | Filtres, consultation rapports, ajout favoris, **suppression** |
+| 📄 Rapports | Consultation rapports | Lecture articles, analyse Claude, ajout favoris, **suppression** |
+
+---
+
+## Indicateurs visuels du Dashboard
+
+| Icône | Signification |
+|-------|---------------|
+| ⭐ | Article déjà en favori (étoile pleine) |
+| ☆ | Article non favori - cliquer pour ajouter (étoile vide) |
+| 📄 | Rapport associé disponible |
+| 🔍 | Recherche libre |
+| 🎯 | Veille thématique |
+| 📡 | Veille RSS |
+| 🗑️ | Supprimer l'élément |
 
 ---
 
@@ -64,7 +76,7 @@
 | Dashboard | `src/dashboard.py` | Interface web Streamlit pour visualisation et gestion |
 | Base de données | `data/veille.db` | SQLite partagée entre serveur MCP et dashboard |
 | Configuration Claude | `claude_desktop_config.json` | Connexion entre Claude Desktop et le serveur MCP |
-| Environnement Python | `venv/` | Environnement virtuel avec les dépendances (mcp, streamlit, feedparser, anthropic) |
+| Variables d'env | `.env` | Clés API (NEWS_API_KEY, ANTHROPIC_API_KEY) |
 
 ---
 
@@ -76,7 +88,7 @@
 | Mardi | Bloc IA (3 thématiques) | 30-45 min | Veilles sur Claude & Anthropic, Écosystème LLM, IA Europe & Réglementation |
 | Mercredi | Bloc PRO (3 thématiques) | 30-45 min | Veilles sur HR Tech, Agents IA, Open Source & Outils Dev |
 | Jeudi | Exploration libre | 15-60 min | Recherches libres sur sujets ponctuels |
-| Vendredi | Consolidation | 20-30 min | Revue des favoris et rapports dans le dashboard |
+| Vendredi | Consolidation | 20-30 min | Revue des favoris et rapports dans le dashboard, export Markdown |
 
 ---
 
@@ -96,4 +108,27 @@
 
 ---
 
-*Document généré le 29/12/2025 - MCP Veille V3*
+## Fonctionnalités Dashboard détaillées
+
+### Page Favoris
+- 🔍 Recherche dans les favoris (titre, description, tags)
+- 📥 Export Markdown de tous les favoris
+- 🗑️ Suppression individuelle
+- 🏷️ Affichage des tags
+
+### Page Historique  
+- 🔽 Filtrage par type (recherche, thématique, RSS)
+- 🔽 Filtrage par rapport (avec/sans rapport)
+- 📄 Consultation des rapports directement dans l'historique
+- ☆/⭐ Ajout aux favoris depuis les articles des rapports
+- 🗑️ Suppression des entrées d'historique
+
+### Page Rapports
+- 📋 Onglet Articles : liste parsée avec ajout favoris (☆/⭐)
+- 🤖 Onglet Analyse Claude : synthèse et recommandations
+- 📝 Onglet Contenu brut : texte complet du rapport
+- 🗑️ Suppression de rapports
+
+---
+
+*Document mis à jour le 29/12/2025 - MCP Veille V3*

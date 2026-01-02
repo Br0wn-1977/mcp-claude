@@ -106,9 +106,16 @@ RSS_FEEDS = {
         {"name": "VentureBeat ", "url": "https://venturebeat.com/feed"},
         {"name": "BDM", "url": "https://www.blogdumoderateur.com/tech/"},
         {"name": "Human Coders News", "url": "https://news.humancoders.com"},
-    ],"IA & Acteurs majeurs": [
+        {"name": "The gradient News", "url": "https://thegradient.pub/rss/"},
+    ],
+    "IA & Acteurs majeurs": [
         {"name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/"},
         {"name": "OpenAI Blog", "url": "https://openai.com/blog/rss.xml"},
+        {"name": "MS Azure", "url": "https://azure.microsoft.com/en-us/blog/feed/"},
+        {"name": "MS Foundry", "url": "https://devblogs.microsoft.com/foundry/feed/"},
+        {"name": "MS Power plateform", "url": "https://devblogs.microsoft.com/powerplatform/feed/"},
+        {"name": "Deepmind", "url": "https://deepmind.google/blog/rss.xml"},
+        {"name": "MS 365", "url": "https://www.microsoft.com/en-us/microsoft-365/blog/feed/"},
 
     ],
     "Développeur & Open Source": [
