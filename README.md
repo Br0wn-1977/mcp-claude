@@ -12,14 +12,15 @@ MCP Veille V3 permet de surveiller l'actualité technologique via deux interface
 - **Claude Desktop** : Interaction en langage naturel pour lancer des veilles et analyses
 - **Dashboard Streamlit** : Interface web pour visualiser et gérer les données
 
-Le système collecte des articles depuis NewsAPI et 7 flux RSS, permet des analyses IA à la demande, et offre une gestion complète des favoris avec export Markdown.
+Le système collecte des articles depuis NewsAPI et 19 flux RSS, permet des analyses IA à la demande, et offre une gestion complète des favoris avec export Markdown.
 
 ## ✨ Fonctionnalités
 
 ### Collecte d'information
 - 🎯 **6 thématiques préconfigurées** (3 IA + 3 Professionnel)
-- 📡 **7 flux RSS** de sources de qualité
+- 📡 **19 flux RSS** répartis en 5 catégories
 - 🔍 **Recherche libre** sur n'importe quel sujet
+- 🌐 **Support multilingue** (français, anglais, ou toutes langues)
 
 ### Analyse et rapports
 - 🤖 **Analyse Claude** à la demande (synthèse, points clés, recommandations)
@@ -117,6 +118,7 @@ streamlit run src/dashboard.py
 MCP-Veille-V3/
 ├── .env                    # Clés API (non versionné)
 ├── README.md               # Ce fichier
+├── CLAUDE.md               # Guide pour Claude Code
 ├── DOCUMENTATION.md        # Documentation complète
 ├── RECAP_FONCTIONNALITES.md # Tableau récapitulatif
 │
@@ -127,6 +129,9 @@ MCP-Veille-V3/
 ├── data/
 │   └── veille.db           # Base SQLite
 │
+├── tests/
+│   └── test_server.py      # Tests du serveur
+│
 └── venv/                   # Environnement Python
 ```
 
@@ -134,8 +139,8 @@ MCP-Veille-V3/
 
 | Outil | Description |
 |-------|-------------|
-| `rechercher_actualites` | Recherche libre NewsAPI |
-| `lancer_veille_thematique` | Veille sur thématique préconfigurée |
+| `rechercher_actualites` | Recherche libre NewsAPI (param `langue`: fr/en/all) |
+| `lancer_veille_thematique` | Veille sur thématique préconfigurée (param `langue`) |
 | `voir_thematiques` | Liste des thématiques |
 | `lancer_veille_rss` | Collecte flux RSS |
 | `analyser_resultats` | Analyse Claude |
@@ -144,13 +149,15 @@ MCP-Veille-V3/
 | `lister_favoris` | Liste des favoris |
 | `supprimer_favori` | Suppression de favori |
 
-## 📡 Sources RSS
+## 📡 Sources RSS (19 flux)
 
 | Catégorie | Sources |
 |-----------|---------|
-| IA & Acteurs majeurs | Hugging Face, Google AI, OpenAI |
-| Développeur & Open Source | Human Coders, GitHub, Hacker News |
-| Réglementation | CNIL |
+| Actu News tech | VentureBeat, BDM, Siècle Digital, The Gradient, Developpez |
+| IA & Acteurs majeurs | Google AI, OpenAI, DeepMind, MIT Tech Review, AI News, The Verge AI |
+| Développeur & Open Source | GitHub, Hugging Face, Ars Technica |
+| Microsoft | MS Azure, MS Foundry, MS Power Platform |
+| Réglementation | CNIL, EU AI Act News |
 
 ## 📅 Séquencement hebdomadaire suggéré
 
@@ -207,4 +214,4 @@ Projet personnel - Usage libre
 
 ---
 
-*MCP Veille V3 - Décembre 2025*
+*MCP Veille V3 - Janvier 2026*

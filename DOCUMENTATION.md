@@ -28,7 +28,7 @@ MCP Veille V3 est un système de veille technologique automatisé basé sur le p
 ### Fonctionnalités principales
 
 - **Veille thématique** : Surveillance automatisée de 6 domaines technologiques préconfigurés
-- **Veille RSS** : Collecte d'articles depuis 7 flux RSS de sources de qualité
+- **Veille RSS** : Collecte d'articles depuis 19 flux RSS de sources de qualité
 - **Recherche libre** : Exploration de n'importe quel sujet via NewsAPI
 - **Analyse IA** : Synthèse et recommandations générées par Claude à la demande
 - **Gestion des favoris** : Sauvegarde et export des articles importants
@@ -94,7 +94,7 @@ MCP Veille V3 est un système de veille technologique automatisé basé sur le p
 │                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐  │
 │  │   NewsAPI    │  │  Flux RSS    │  │   Anthropic API       │  │
-│  │  (articles)  │  │  (7 sources) │  │   (analyse Claude)    │  │
+│  │  (articles)  │  │ (19 sources) │  │   (analyse Claude)    │  │
 │  └──────────────┘  └──────────────┘  └───────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -217,8 +217,8 @@ streamlit run src/dashboard.py
 
 | Outil | Fonction | Paramètres |
 |-------|----------|------------|
-| `rechercher_actualites` | Recherche libre sur NewsAPI | sujet (requis), jours (défaut: 7), max_articles (défaut: 10) |
-| `lancer_veille_thematique` | Veille sur une thématique préconfigurée | thematique (requis), jours (défaut: 7), max_articles (défaut: 10) |
+| `rechercher_actualites` | Recherche libre sur NewsAPI | sujet (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
+| `lancer_veille_thematique` | Veille sur une thématique préconfigurée | thematique (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
 | `voir_thematiques` | Liste les thématiques disponibles | Aucun |
 | `lancer_veille_rss` | Collecte les flux RSS | jours (défaut: 3), categorie (optionnel) |
 | `analyser_resultats` | Analyse Claude des derniers résultats | Aucun |
@@ -226,6 +226,8 @@ streamlit run src/dashboard.py
 | `ajouter_favori` | Sauvegarde un article | url, titre (requis), source, description, tags (optionnels) |
 | `lister_favoris` | Affiche les favoris | limite (défaut: 20) |
 | `supprimer_favori` | Retire un favori | favori_id ou url |
+
+> **Note** : Le paramètre `langue` accepte "fr" (français), "en" (anglais), ou "all" (toutes langues).
 
 ### Détail des outils
 
@@ -240,8 +242,9 @@ Effectue une recherche libre sur n'importe quel sujet via NewsAPI.
 
 **Paramètres** :
 - `sujet` (string, requis) : Mots-clés de recherche
-- `jours` (integer, défaut: 7) : Période de recherche en jours
-- `max_articles` (integer, défaut: 10) : Nombre maximum d'articles
+- `jours` (integer, défaut: 7) : Période de recherche en jours (1-30)
+- `max_articles` (integer, défaut: 10) : Nombre maximum d'articles (1-100)
+- `langue` (string, défaut: "fr") : Langue des articles ("fr", "en", "all")
 
 ---
 
@@ -256,8 +259,9 @@ Lance une veille sur une des 6 thématiques préconfigurées avec des mots-clés
 
 **Paramètres** :
 - `thematique` (string, requis) : Nom exact de la thématique
-- `jours` (integer, défaut: 7) : Période de recherche
-- `max_articles` (integer, défaut: 10) : Nombre maximum d'articles
+- `jours` (integer, défaut: 7) : Période de recherche (1-30)
+- `max_articles` (integer, défaut: 10) : Nombre maximum d'articles (1-100)
+- `langue` (string, défaut: "fr") : Langue des articles ("fr", "en", "all")
 
 ---
 
@@ -272,7 +276,7 @@ Affiche la liste des 6 thématiques disponibles avec leurs descriptions.
 
 #### lancer_veille_rss
 
-Collecte les articles récents depuis les 7 flux RSS configurés.
+Collecte les articles récents depuis les 19 flux RSS configurés (5 catégories).
 
 **Exemples d'utilisation** :
 - "Lance la veille RSS"
@@ -382,29 +386,51 @@ Retire un article des favoris.
 
 ---
 
-## Flux RSS configurés
+## Flux RSS configurés (19 flux)
 
-### IA & Acteurs majeurs
+### Actu News tech (5 flux)
 
-| Source | URL | Description |
-|--------|-----|-------------|
-| Hugging Face Blog | https://huggingface.co/blog/feed.xml | Actualités modèles et datasets |
-| Google AI Blog | https://blog.google/technology/ai/rss/ | Recherche et produits Google AI |
-| OpenAI Blog | https://openai.com/blog/rss.xml | Annonces et recherche OpenAI |
+| Source | URL |
+|--------|-----|
+| VentureBeat | https://venturebeat.com/feed/ |
+| BDM (Blog du Modérateur) | https://www.blogdumoderateur.com/feed/ |
+| Siècle Digital | https://siecledigital.fr/feed/ |
+| The Gradient | https://thegradient.pub/rss/ |
+| Developpez | https://www.developpez.com/index/rss |
 
-### Développeur & Open Source
+### IA & Acteurs majeurs (6 flux)
 
-| Source | URL | Description |
-|--------|-----|-------------|
-| Human Coders News | https://news.humancoders.com/feed | Actualités dev francophones |
-| GitHub Blog | https://github.blog/feed/ | Nouveautés GitHub |
-| Hacker News IA | https://hnrss.org/newest?q=AI+OR+LLM+OR+Claude&points=50 | Posts populaires IA sur HN |
+| Source | URL |
+|--------|-----|
+| Google AI Blog | https://blog.google/technology/ai/rss/ |
+| OpenAI Blog | https://openai.com/blog/rss.xml |
+| DeepMind | https://deepmind.google/blog/rss.xml |
+| MIT Tech Review | https://www.technologyreview.com/feed/ |
+| AI News | https://www.artificialintelligence-news.com/feed/ |
+| The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml |
 
-### Réglementation
+### Développeur & Open Source (3 flux)
 
-| Source | URL | Description |
-|--------|-----|-------------|
-| CNIL Actualités | https://www.cnil.fr/fr/rss.xml | Actualités protection des données |
+| Source | URL |
+|--------|-----|
+| GitHub Blog | https://github.blog/feed/ |
+| Hugging Face Blog | https://huggingface.co/blog/feed.xml |
+| Ars Technica | https://feeds.arstechnica.com/arstechnica/technology-lab |
+
+### Microsoft (3 flux)
+
+| Source | URL |
+|--------|-----|
+| MS Azure | https://azure.microsoft.com/en-us/blog/feed/ |
+| MS Foundry | https://devblogs.microsoft.com/foundry/feed/ |
+| MS Power Platform | https://devblogs.microsoft.com/powerplatform/feed/ |
+
+### Réglementation (2 flux)
+
+| Source | URL |
+|--------|-----|
+| CNIL Actualités | https://www.cnil.fr/fr/rss.xml |
+| EU AI Act News | https://artificialintelligenceact.eu/feed/ |
 
 ---
 
@@ -664,7 +690,7 @@ RSS_FEEDS = {
 ### Modifier le dashboard
 
 1. Ouvrir `src/dashboard.py`
-2. Si vous avez ajouté des thématiques, mettre à jour le dictionnaire `THEMATIQUES` dans le dashboard également
+2. Le dashboard importe automatiquement `THEMATIQUES` depuis `veille_server.py` (source unique de vérité)
 3. Relancer Streamlit : `streamlit run src/dashboard.py`
 
 ---
@@ -783,6 +809,16 @@ Base de données SQLite contenant :
 
 ## Changelog
 
+### Version 3.1 (Janvier 2026)
+
+- **19 flux RSS** répartis en 5 catégories (vs 7 précédemment)
+- **Support multilingue** : paramètre `langue` (fr/en/all) sur les recherches
+- **Validation des entrées** : jours (1-30), max_articles (1-100)
+- **Refactoring THEMATIQUES** : import unique depuis veille_server.py
+- **Nouvelles sources** : Siècle Digital, MIT Tech Review, AI News, The Verge AI, Ars Technica, EU AI Act News
+- Correction des flux RSS cassés (Human Coders, Anthropic, MS 365)
+- Meilleure gestion des erreurs (plus de `except:` silencieux)
+
 ### Version 3.0 (Décembre 2024)
 
 - Architecture MCP complète avec 9 outils
@@ -805,5 +841,5 @@ Pour toute question ou problème :
 
 ---
 
-*Documentation MCP Veille V3 - Version 3.0*
-*Dernière mise à jour : Décembre 2024*
+*Documentation MCP Veille V3 - Version 3.1*
+*Dernière mise à jour : Janvier 2026*

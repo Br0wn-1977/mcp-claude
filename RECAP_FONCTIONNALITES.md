@@ -4,15 +4,17 @@
 
 | Outil | Fonction | Exemple de commande | Paramètres |
 |-------|----------|---------------------|------------|
-| `rechercher_actualites` | Recherche libre sur n'importe quel sujet via NewsAPI | "Cherche des news sur quantum computing" | sujet (requis), jours (défaut: 7), max_articles (défaut: 10) |
-| `lancer_veille_thematique` | Veille sur une des 6 thématiques préconfigurées | "Lance une veille sur Claude & Anthropic" | thematique (requis), jours (défaut: 7), max_articles (défaut: 10) |
+| `rechercher_actualites` | Recherche libre sur n'importe quel sujet via NewsAPI | "Cherche des news sur quantum computing" | sujet (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
+| `lancer_veille_thematique` | Veille sur une des 6 thématiques préconfigurées | "Lance une veille sur Claude & Anthropic" | thematique (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
 | `voir_thematiques` | Affiche la liste des thématiques disponibles | "Quelles sont les thématiques disponibles ?" | Aucun |
-| `lancer_veille_rss` | Collecte les articles des 7 flux RSS configurés | "Collecte les flux RSS des 3 derniers jours" | jours (défaut: 3), categorie (optionnel) |
+| `lancer_veille_rss` | Collecte les articles des 19 flux RSS configurés | "Collecte les flux RSS des 3 derniers jours" | jours (défaut: 3), categorie (optionnel) |
 | `analyser_resultats` | Analyse Claude des derniers résultats collectés | "Analyse les résultats" | Aucun |
 | `generer_rapport` | Crée un rapport structuré sauvegardé en base | "Génère un rapport complet" | inclure_analyse (défaut: true) |
 | `ajouter_favori` | Sauvegarde un article en favori | "Ajoute le premier article à mes favoris" | url, titre (requis), source, description, tags (optionnels) |
 | `lister_favoris` | Affiche les articles favoris | "Montre mes favoris" | limite (défaut: 20) |
 | `supprimer_favori` | Retire un article des favoris | "Supprime le favori numéro 3" | favori_id ou url |
+
+> **Note** : Le paramètre `langue` accepte "fr" (français, défaut), "en" (anglais), ou "all" (toutes langues). Validation automatique des paramètres : jours (1-30), max_articles (1-100).
 
 ---
 
@@ -29,17 +31,15 @@
 
 ---
 
-## Flux RSS configurés
+## Flux RSS configurés (19 flux)
 
-| Catégorie | Source | URL |
-|-----------|--------|-----|
-| IA & Acteurs majeurs | Hugging Face Blog | https://huggingface.co/blog/feed.xml |
-| IA & Acteurs majeurs | Google AI Blog | https://blog.google/technology/ai/rss/ |
-| IA & Acteurs majeurs | OpenAI Blog | https://openai.com/blog/rss.xml |
-| Développeur & Open Source | Human Coders News | https://news.humancoders.com/feed |
-| Développeur & Open Source | GitHub Blog | https://github.blog/feed/ |
-| Développeur & Open Source | Hacker News IA | https://hnrss.org/newest?q=AI+OR+LLM+OR+Claude&points=50 |
-| Réglementation | CNIL Actualités | https://www.cnil.fr/fr/rss.xml |
+| Catégorie | Sources |
+|-----------|---------|
+| **Actu News tech** (5) | VentureBeat, BDM, Siècle Digital, The Gradient, Developpez |
+| **IA & Acteurs majeurs** (6) | Google AI, OpenAI, DeepMind, MIT Tech Review, AI News, The Verge AI |
+| **Développeur & Open Source** (3) | GitHub Blog, Hugging Face Blog, Ars Technica |
+| **Microsoft** (3) | MS Azure, MS Foundry, MS Power Platform |
+| **Réglementation** (2) | CNIL Actualités, EU AI Act News |
 
 ---
 
@@ -131,4 +131,4 @@
 
 ---
 
-*Document mis à jour le 29/12/2025 - MCP Veille V3*
+*Document mis à jour le 17/01/2026 - MCP Veille V3.1*
