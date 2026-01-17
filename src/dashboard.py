@@ -17,6 +17,7 @@ Lancement :
     streamlit run dashboard.py
 """
 
+import sys
 import streamlit as st
 import sqlite3
 import json
@@ -25,6 +26,16 @@ import pandas as pd
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, List, Dict
+
+# Ajouter le répertoire src au path pour importer veille_server
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Import des thématiques depuis le serveur (source unique de vérité)
+try:
+    from veille_server import THEMATIQUES
+except ImportError:
+    # Fallback si l'import échoue (ex: dépendances manquantes)
+    THEMATIQUES = {}
 
 # =============================================================================
 # CONFIGURATION
@@ -39,37 +50,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# =============================================================================
-# THÉMATIQUES (pour affichage sur le dashboard)
-# =============================================================================
-
-THEMATIQUES = {
-    "Claude & Anthropic": {
-        "description": "Actualités Anthropic, Claude AI, protocole MCP",
-        "categorie": "IA"
-    },
-    "Écosystème LLM": {
-        "description": "OpenAI, Google Gemini, Mistral, Meta Llama et autres grands modèles",
-        "categorie": "IA"
-    },
-    "IA Europe & Réglementation": {
-        "description": "AI Act, RGPD appliqué à l'IA, positions CNIL",
-        "categorie": "IA"
-    },
-    "HR Tech & Formation": {
-        "description": "Cornerstone, LMS, talent management, formation professionnelle",
-        "categorie": "PRO"
-    },
-    "Agents IA & Automatisation": {
-        "description": "AI Agents, RAG, LangChain, automatisation intelligente",
-        "categorie": "PRO"
-    },
-    "Open Source & Outils Dev": {
-        "description": "Hugging Face, Open WebUI, Ollama, outils développeurs IA",
-        "categorie": "PRO"
-    }
-}
 
 # =============================================================================
 # FONCTIONS BASE DE DONNÉES
@@ -351,8 +331,9 @@ def get_historique(limite: int = 50) -> list:
                             item['has_rapport'] = True
                             item['rapport_id'] = rapport['id']
                             break
-                    except:
-                        pass
+                    except (KeyError, TypeError, IndexError):
+                        # Données manquantes ou mal formatées, on continue
+                        continue
         
         return historique
     except Exception as e:

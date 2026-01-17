@@ -103,31 +103,33 @@ THEMATIQUES = {
 
 RSS_FEEDS = {
     "Actu News tech": [
-        {"name": "VentureBeat ", "url": "https://venturebeat.com/feed"},
-        {"name": "BDM", "url": "https://www.blogdumoderateur.com/tech/"},
-        {"name": "Human Coders News", "url": "https://news.humancoders.com"},
-        {"name": "The gradient News", "url": "https://thegradient.pub/rss/"},
+        {"name": "VentureBeat", "url": "https://venturebeat.com/feed/"},
+        {"name": "BDM", "url": "https://www.blogdumoderateur.com/feed/"},
+        {"name": "Siècle Digital", "url": "https://siecledigital.fr/feed/"},
+        {"name": "The Gradient", "url": "https://thegradient.pub/rss/"},
+        {"name": "Developpez", "url": "https://www.developpez.com/index/rss"},
     ],
     "IA & Acteurs majeurs": [
         {"name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/"},
         {"name": "OpenAI Blog", "url": "https://openai.com/blog/rss.xml"},
-        {"name": "MS Azure", "url": "https://azure.microsoft.com/en-us/blog/feed/"},
-        {"name": "MS Foundry", "url": "https://devblogs.microsoft.com/foundry/feed/"},
-        {"name": "MS Power plateform", "url": "https://devblogs.microsoft.com/powerplatform/feed/"},
-        {"name": "Deepmind", "url": "https://deepmind.google/blog/rss.xml"},
-        {"name": "MS 365", "url": "https://www.microsoft.com/en-us/microsoft-365/blog/feed/"},
-
+        {"name": "DeepMind", "url": "https://deepmind.google/blog/rss.xml"},
+        {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/"},
+        {"name": "AI News", "url": "https://www.artificialintelligence-news.com/feed/"},
+        {"name": "The Verge AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
     ],
     "Développeur & Open Source": [
-        {"name": "Human Coders News", "url": "https://news.humancoders.com/t/open-source"},
         {"name": "GitHub Blog", "url": "https://github.blog/feed/"},
         {"name": "Hugging Face Blog", "url": "https://huggingface.co/blog/feed.xml"},
-  
+        {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/technology-lab"},
+    ],
+    "Microsoft": [
+        {"name": "MS Azure", "url": "https://azure.microsoft.com/en-us/blog/feed/"},
+        {"name": "MS Foundry", "url": "https://devblogs.microsoft.com/foundry/feed/"},
+        {"name": "MS Power Platform", "url": "https://devblogs.microsoft.com/powerplatform/feed/"},
     ],
     "Réglementation": [
         {"name": "CNIL Actualités", "url": "https://www.cnil.fr/fr/rss.xml"},
-        {"name": "WEForum", "url": "https://www.weforum.org/stories/artificial-intelligence/"},
-       
+        {"name": "EU AI Act News", "url": "https://artificialintelligenceact.eu/feed/"},
     ]
 }
 
@@ -215,27 +217,84 @@ def get_db_connection():
 server = Server("veille-system")
 
 # =============================================================================
+# VALIDATION DES ENTRÉES
+# =============================================================================
+
+LANGUES_VALIDES = {"fr", "en", "de", "es", "it", "pt", "nl", "ru", "zh", "ar", "all"}
+
+def valider_parametres(jours: int = None, max_articles: int = None, langue: str = None) -> dict:
+    """Valide les paramètres communs et retourne les valeurs corrigées.
+
+    Returns:
+        dict avec les clés: jours, max_articles, langue, errors (liste d'avertissements)
+    """
+    errors = []
+    result = {}
+
+    if jours is not None:
+        if jours < 1:
+            errors.append(f"jours={jours} invalide, utilisation de 1")
+            result["jours"] = 1
+        elif jours > 30:
+            errors.append(f"jours={jours} trop élevé, limité à 30")
+            result["jours"] = 30
+        else:
+            result["jours"] = jours
+
+    if max_articles is not None:
+        if max_articles < 1:
+            errors.append(f"max_articles={max_articles} invalide, utilisation de 1")
+            result["max_articles"] = 1
+        elif max_articles > 100:
+            errors.append(f"max_articles={max_articles} trop élevé, limité à 100 (limite NewsAPI)")
+            result["max_articles"] = 100
+        else:
+            result["max_articles"] = max_articles
+
+    if langue is not None:
+        langue_lower = langue.lower()
+        if langue_lower not in LANGUES_VALIDES:
+            errors.append(f"langue='{langue}' non reconnue, utilisation de 'fr'")
+            result["langue"] = "fr"
+        else:
+            result["langue"] = langue_lower
+
+    result["errors"] = errors
+    return result
+
+
+# =============================================================================
 # FONCTIONS MÉTIER - RECHERCHE NEWSAPI
 # =============================================================================
 
-def rechercher_newsapi(query: str, jours: int = 7, max_resultats: int = 10) -> dict:
-    """Recherche d'articles via NewsAPI."""
+def rechercher_newsapi(query: str, jours: int = 7, max_resultats: int = 10, langue: str = "fr") -> dict:
+    """Recherche d'articles via NewsAPI.
+
+    Args:
+        query: Mots-clés de recherche
+        jours: Période en jours (défaut: 7)
+        max_resultats: Nombre max d'articles (défaut: 10)
+        langue: Code langue ISO - "fr", "en", ou "all" pour toutes (défaut: "fr")
+    """
     global derniers_resultats
-    
+
     if not NEWS_API_KEY:
         return {"success": False, "error": "NEWS_API_KEY non configurée", "articles": []}
-    
+
     try:
         date_debut = (datetime.now() - timedelta(days=jours)).strftime("%Y-%m-%d")
-        
+
         params = {
             "q": query,
             "from": date_debut,
             "sortBy": "publishedAt",
-            "language": "en",
             "pageSize": min(max_resultats, 100),
             "apiKey": NEWS_API_KEY
         }
+
+        # Ajouter le filtre de langue sauf si "all"
+        if langue and langue.lower() != "all":
+            params["language"] = langue.lower()
         
         logger.info(f"Recherche NewsAPI: '{query}' sur {jours} jours")
         response = requests.get("https://newsapi.org/v2/everything", params=params, timeout=30)
@@ -294,28 +353,28 @@ def enregistrer_historique(type_recherche: str, query: str, nb_resultats: int, p
 # FONCTIONS MÉTIER - VEILLE THÉMATIQUE
 # =============================================================================
 
-def lancer_veille_thematique(nom_thematique: str, jours: int = 7, max_articles: int = 10) -> dict:
+def lancer_veille_thematique(nom_thematique: str, jours: int = 7, max_articles: int = 10, langue: str = "fr") -> dict:
     """Lance une veille sur une thématique préconfigurée."""
     global derniers_resultats
-    
+
     if nom_thematique not in THEMATIQUES:
         return {
             "success": False,
             "error": f"Thématique '{nom_thematique}' inconnue. Utilisez 'voir_thematiques' pour la liste.",
             "articles": []
         }
-    
+
     thematique = THEMATIQUES[nom_thematique]
     keywords = thematique["keywords"]
-    
+
     logger.info(f"Veille thématique: {nom_thematique} ({len(keywords)} mots-clés)")
-    
+
     all_articles = []
     seen_urls = set()
-    
+
     # Rechercher avec chaque mot-clé (limiter à 2 pour éviter trop de requêtes)
     for keyword in keywords[:2]:
-        result = rechercher_newsapi(keyword, jours=jours, max_resultats=max_articles)
+        result = rechercher_newsapi(keyword, jours=jours, max_resultats=max_articles, langue=langue)
         
         if result["success"]:
             for art in result["articles"]:
@@ -656,7 +715,8 @@ Exemples: "Cherche des news sur quantum computing", "Actualités Tesla cette sem
                 "properties": {
                     "sujet": {"type": "string", "description": "Mots-clés de recherche"},
                     "jours": {"type": "integer", "description": "Période en jours (défaut: 7)", "default": 7},
-                    "max_articles": {"type": "integer", "description": "Nombre max d'articles (défaut: 10)", "default": 10}
+                    "max_articles": {"type": "integer", "description": "Nombre max d'articles (défaut: 10)", "default": 10},
+                    "langue": {"type": "string", "description": "Langue: 'fr' (défaut), 'en', ou 'all' pour toutes", "default": "fr"}
                 },
                 "required": ["sujet"]
             }
@@ -680,7 +740,8 @@ Exemples: "Lance une veille sur Claude & Anthropic", "Veille thématique Écosys
                 "properties": {
                     "thematique": {"type": "string", "description": "Nom exact de la thématique"},
                     "jours": {"type": "integer", "description": "Période en jours (défaut: 7)", "default": 7},
-                    "max_articles": {"type": "integer", "description": "Nombre max d'articles (défaut: 10)", "default": 10}
+                    "max_articles": {"type": "integer", "description": "Nombre max d'articles (défaut: 10)", "default": 10},
+                    "langue": {"type": "string", "description": "Langue: 'fr' (défaut), 'en', ou 'all' pour toutes", "default": "fr"}
                 },
                 "required": ["thematique"]
             }
@@ -791,34 +852,68 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         sujet = arguments.get("sujet", "")
         if not sujet:
             return [TextContent(type="text", text="❌ Veuillez spécifier un sujet de recherche.")]
-        
-        result = rechercher_newsapi(sujet, arguments.get("jours", 7), arguments.get("max_articles", 10))
-        
+
+        # Validation des paramètres
+        params = valider_parametres(
+            jours=arguments.get("jours", 7),
+            max_articles=arguments.get("max_articles", 10),
+            langue=arguments.get("langue", "fr")
+        )
+
+        result = rechercher_newsapi(
+            sujet,
+            params["jours"],
+            params["max_articles"],
+            params["langue"]
+        )
+
         if not result["success"]:
             return [TextContent(type="text", text=f"❌ Erreur: {result['error']}")]
-        
+
         if not result["articles"]:
             return [TextContent(type="text", text=f"🔍 Aucun article trouvé pour '{sujet}'.")]
-        
+
+        # Ajouter les avertissements de validation si présents
+        warnings = ""
+        if params["errors"]:
+            warnings = "⚠️ " + " | ".join(params["errors"]) + "\n\n"
+
         response = formater_resultats_recherche(result["articles"], f"Recherche: {sujet}")
-        return [TextContent(type="text", text=response)]
-    
+        return [TextContent(type="text", text=warnings + response)]
+
     # --- Veille thématique ---
     elif name == "lancer_veille_thematique":
         thematique = arguments.get("thematique", "")
         if not thematique:
             return [TextContent(type="text", text="❌ Veuillez spécifier une thématique.")]
-        
-        result = lancer_veille_thematique(thematique, arguments.get("jours", 7), arguments.get("max_articles", 10))
-        
+
+        # Validation des paramètres
+        params = valider_parametres(
+            jours=arguments.get("jours", 7),
+            max_articles=arguments.get("max_articles", 10),
+            langue=arguments.get("langue", "fr")
+        )
+
+        result = lancer_veille_thematique(
+            thematique,
+            params["jours"],
+            params["max_articles"],
+            params["langue"]
+        )
+
         if not result["success"]:
             return [TextContent(type="text", text=f"❌ {result['error']}")]
-        
+
+        # Ajouter les avertissements de validation si présents
+        warnings = ""
+        if params["errors"]:
+            warnings = "⚠️ " + " | ".join(params["errors"]) + "\n\n"
+
         response = formater_resultats_recherche(
-            result["articles"], 
+            result["articles"],
             f"🎯 Thématique: {result['thematique']}\n📋 {result['description']}"
         )
-        return [TextContent(type="text", text=response)]
+        return [TextContent(type="text", text=warnings + response)]
     
     # --- Voir thématiques ---
     elif name == "voir_thematiques":
@@ -840,16 +935,25 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     
     # --- Veille RSS ---
     elif name == "lancer_veille_rss":
-        result = lancer_veille_rss(arguments.get("jours", 3), arguments.get("categorie"))
-        
+        # Validation du paramètre jours
+        params = valider_parametres(jours=arguments.get("jours", 3))
+        jours = params["jours"]
+
+        result = lancer_veille_rss(jours, arguments.get("categorie"))
+
         if not result["success"]:
             return [TextContent(type="text", text=f"❌ Erreur: {result.get('error', 'Erreur inconnue')}")]
-        
+
         if not result["articles"]:
             return [TextContent(type="text", text="📭 Aucun article RSS trouvé pour cette période.")]
-        
+
+        # Ajouter les avertissements de validation si présents
+        warnings = ""
+        if params["errors"]:
+            warnings = "⚠️ " + " | ".join(params["errors"]) + "\n\n"
+
         response = formater_resultats_rss(result["articles"], result["categories"])
-        return [TextContent(type="text", text=response)]
+        return [TextContent(type="text", text=warnings + response)]
     
     # --- Analyse Claude ---
     elif name == "analyser_resultats":
@@ -1040,8 +1144,9 @@ async def read_resource(uri: str) -> str:
                 """)
                 historique = [dict(row) for row in cursor.fetchall()]
                 return json.dumps({"historique": historique}, ensure_ascii=False, indent=2)
-        except:
-            return json.dumps({"historique": []})
+        except Exception as e:
+            logger.error(f"Erreur lecture historique ressource: {e}")
+            return json.dumps({"historique": [], "error": str(e)})
     
     return json.dumps({"error": f"Ressource inconnue: {uri}"})
 
