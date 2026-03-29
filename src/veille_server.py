@@ -6,7 +6,7 @@ MCP Veille V3 - Serveur Principal
 
 Phase 3 : Capacités de veille complètes
 - 6 thématiques préconfigurées (NewsAPI)
-- 5 catégories RSS (18 flux)
+- 5 catégories RSS (17 flux)
 - Analyse Claude à la demande
 - Génération de rapports
 
@@ -98,7 +98,7 @@ THEMATIQUES = {
 }
 
 # =============================================================================
-# FLUX RSS CONFIGURÉS (5 catégories, 18 flux)
+# FLUX RSS CONFIGURÉS (5 catégories, 17 flux)
 # =============================================================================
 
 RSS_FEEDS = {
@@ -125,7 +125,6 @@ RSS_FEEDS = {
         {"name": "MS Power Platform", "url": "https://devblogs.microsoft.com/powerplatform/feed/"},
     ],
     "Réglementation": [
-    {"name": "CNIL Actualités",        "url": "https://www.cnil.fr/fr/rss.xml"},
     {"name": "EU AI Act News",          "url": "https://artificialintelligenceact.eu/fr/feed/"},
     {"name": "APD Belgique",            "url": "https://www.autoriteprotectiondonnees.be/rss.xml"},
     {"name": "Village de la Justice",   "url": "https://www.village-justice.com/rss.xml"},
@@ -763,7 +762,7 @@ Utilise quand l'utilisateur demande la liste des thématiques ou ne sait pas laq
 - "IA & Acteurs majeurs" : Google AI Blog, OpenAI Blog, DeepMind, AI News
 - "Développeur & Open Source" : GitHub Blog, Hugging Face Blog, Ars Technica
 - "Microsoft" : MS Azure, MS Foundry, MS Power Platform
-- "Réglementation" : CNIL, EU AI Act News, APD Belgique, Village de la Justice
+- "Réglementation" : EU AI Act News, APD Belgique, Village de la Justice
 
 Exemples: "Lance la veille RSS", "Collecte les flux RSS Microsoft" """,
             inputSchema={

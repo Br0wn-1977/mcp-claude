@@ -7,7 +7,7 @@
 | `rechercher_actualites` | Recherche libre sur n'importe quel sujet via NewsAPI | "Cherche des news sur quantum computing" | sujet (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
 | `lancer_veille_thematique` | Veille sur une des 6 thématiques préconfigurées | "Lance une veille sur Claude & Anthropic" | thematique (requis), jours (défaut: 7), max_articles (défaut: 10), langue (défaut: "fr") |
 | `voir_thematiques` | Affiche la liste des thématiques disponibles | "Quelles sont les thématiques disponibles ?" | Aucun |
-| `lancer_veille_rss` | Collecte les articles des 19 flux RSS configurés | "Collecte les flux RSS des 3 derniers jours" | jours (défaut: 3), categorie (optionnel) |
+| `lancer_veille_rss` | Collecte les articles des 17 flux RSS configurés | "Collecte les flux RSS des 3 derniers jours" | jours (défaut: 3), categorie (optionnel) |
 | `analyser_resultats` | Analyse Claude des derniers résultats collectés | "Analyse les résultats" | Aucun |
 | `generer_rapport` | Crée un rapport structuré sauvegardé en base | "Génère un rapport complet" | inclure_analyse (défaut: true) |
 | `ajouter_favori` | Sauvegarde un article en favori | "Ajoute le premier article à mes favoris" | url, titre (requis), source, description, tags (optionnels) |
@@ -31,15 +31,15 @@
 
 ---
 
-## Flux RSS configurés (19 flux)
+## Flux RSS configurés (17 flux)
 
 | Catégorie | Sources |
 |-----------|---------|
-| **Actu News tech** (5) | VentureBeat, BDM, Siècle Digital, The Gradient, Developpez |
-| **IA & Acteurs majeurs** (6) | Google AI, OpenAI, DeepMind, MIT Tech Review, AI News, The Verge AI |
+| **Actu News tech** (4) | BDM, Siècle Digital, The Gradient, Developpez |
+| **IA & Acteurs majeurs** (4) | Google AI Blog, OpenAI Blog, DeepMind, AI News |
 | **Développeur & Open Source** (3) | GitHub Blog, Hugging Face Blog, Ars Technica |
 | **Microsoft** (3) | MS Azure, MS Foundry, MS Power Platform |
-| **Réglementation** (2) | CNIL Actualités, EU AI Act News |
+| **Réglementation** (3) | EU AI Act News, APD Belgique, Village de la Justice |
 
 ---
 
@@ -131,4 +131,4 @@
 
 ---
 
-*Document mis à jour le 17/01/2026 - MCP Veille V3.1*
+*Document mis à jour le 29/03/2026 - MCP Veille V3.1*

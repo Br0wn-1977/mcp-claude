@@ -12,13 +12,13 @@ MCP Veille V3 permet de surveiller l'actualité technologique via deux interface
 - **Claude Desktop** : Interaction en langage naturel pour lancer des veilles et analyses
 - **Dashboard Streamlit** : Interface web pour visualiser et gérer les données
 
-Le système collecte des articles depuis NewsAPI et 19 flux RSS, permet des analyses IA à la demande, et offre une gestion complète des favoris avec export Markdown.
+Le système collecte des articles depuis NewsAPI et 17 flux RSS, permet des analyses IA à la demande, et offre une gestion complète des favoris avec export Markdown.
 
 ## ✨ Fonctionnalités
 
 ### Collecte d'information
 - 🎯 **6 thématiques préconfigurées** (3 IA + 3 Professionnel)
-- 📡 **19 flux RSS** répartis en 5 catégories
+- 📡 **17 flux RSS** répartis en 5 catégories
 - 🔍 **Recherche libre** sur n'importe quel sujet
 - 🌐 **Support multilingue** (français, anglais, ou toutes langues)
 
@@ -149,15 +149,15 @@ MCP-Veille-V3/
 | `lister_favoris` | Liste des favoris |
 | `supprimer_favori` | Suppression de favori |
 
-## 📡 Sources RSS (19 flux)
+## 📡 Sources RSS (17 flux)
 
 | Catégorie | Sources |
 |-----------|---------|
-| Actu News tech | VentureBeat, BDM, Siècle Digital, The Gradient, Developpez |
-| IA & Acteurs majeurs | Google AI, OpenAI, DeepMind, MIT Tech Review, AI News, The Verge AI |
-| Développeur & Open Source | GitHub, Hugging Face, Ars Technica |
-| Microsoft | MS Azure, MS Foundry, MS Power Platform |
-| Réglementation | CNIL, EU AI Act News |
+| Actu News tech (4) | BDM, Siècle Digital, The Gradient, Developpez |
+| IA & Acteurs majeurs (4) | Google AI Blog, OpenAI Blog, DeepMind, AI News |
+| Développeur & Open Source (3) | GitHub Blog, Hugging Face Blog, Ars Technica |
+| Microsoft (3) | MS Azure, MS Foundry, MS Power Platform |
+| Réglementation (3) | EU AI Act News, APD Belgique, Village de la Justice |
 
 ## 📅 Séquencement hebdomadaire suggéré
 
@@ -214,4 +214,4 @@ Projet personnel - Usage libre
 
 ---
 
-*MCP Veille V3 - Janvier 2026*
+*MCP Veille V3 - Mars 2026*

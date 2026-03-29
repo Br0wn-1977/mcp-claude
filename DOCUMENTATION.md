@@ -28,7 +28,7 @@ MCP Veille V3 est un système de veille technologique automatisé basé sur le p
 ### Fonctionnalités principales
 
 - **Veille thématique** : Surveillance automatisée de 6 domaines technologiques préconfigurés
-- **Veille RSS** : Collecte d'articles depuis 19 flux RSS de sources de qualité
+- **Veille RSS** : Collecte d'articles depuis 17 flux RSS de sources de qualité
 - **Recherche libre** : Exploration de n'importe quel sujet via NewsAPI
 - **Analyse IA** : Synthèse et recommandations générées par Claude à la demande
 - **Gestion des favoris** : Sauvegarde et export des articles importants
@@ -94,7 +94,7 @@ MCP Veille V3 est un système de veille technologique automatisé basé sur le p
 │                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐  │
 │  │   NewsAPI    │  │  Flux RSS    │  │   Anthropic API       │  │
-│  │  (articles)  │  │ (19 sources) │  │   (analyse Claude)    │  │
+│  │  (articles)  │  │ (17 sources) │  │   (analyse Claude)    │  │
 │  └──────────────┘  └──────────────┘  └───────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -276,7 +276,7 @@ Affiche la liste des 6 thématiques disponibles avec leurs descriptions.
 
 #### lancer_veille_rss
 
-Collecte les articles récents depuis les 19 flux RSS configurés (5 catégories).
+Collecte les articles récents depuis les 17 flux RSS configurés (5 catégories).
 
 **Exemples d'utilisation** :
 - "Lance la veille RSS"
@@ -388,26 +388,23 @@ Retire un article des favoris.
 
 ## Flux RSS configurés (19 flux)
 
-### Actu News tech (5 flux)
+### Actu News tech (4 flux)
 
 | Source | URL |
 |--------|-----|
-| VentureBeat | https://venturebeat.com/feed/ |
 | BDM (Blog du Modérateur) | https://www.blogdumoderateur.com/feed/ |
 | Siècle Digital | https://siecledigital.fr/feed/ |
 | The Gradient | https://thegradient.pub/rss/ |
 | Developpez | https://www.developpez.com/index/rss |
 
-### IA & Acteurs majeurs (6 flux)
+### IA & Acteurs majeurs (4 flux)
 
 | Source | URL |
 |--------|-----|
 | Google AI Blog | https://blog.google/technology/ai/rss/ |
 | OpenAI Blog | https://openai.com/blog/rss.xml |
 | DeepMind | https://deepmind.google/blog/rss.xml |
-| MIT Tech Review | https://www.technologyreview.com/feed/ |
 | AI News | https://www.artificialintelligence-news.com/feed/ |
-| The Verge AI | https://www.theverge.com/rss/ai-artificial-intelligence/index.xml |
 
 ### Développeur & Open Source (3 flux)
 
@@ -425,12 +422,13 @@ Retire un article des favoris.
 | MS Foundry | https://devblogs.microsoft.com/foundry/feed/ |
 | MS Power Platform | https://devblogs.microsoft.com/powerplatform/feed/ |
 
-### Réglementation (2 flux)
+### Réglementation (3 flux)
 
 | Source | URL |
 |--------|-----|
-| CNIL Actualités | https://www.cnil.fr/fr/rss.xml |
-| EU AI Act News | https://artificialintelligenceact.eu/feed/ |
+| EU AI Act News | https://artificialintelligenceact.eu/fr/feed/ |
+| APD Belgique | https://www.autoriteprotectiondonnees.be/rss.xml |
+| Village de la Justice | https://www.village-justice.com/rss.xml |
 
 ---
 
@@ -811,11 +809,11 @@ Base de données SQLite contenant :
 
 ### Version 3.1 (Janvier 2026)
 
-- **19 flux RSS** répartis en 5 catégories (vs 7 précédemment)
+- **17 flux RSS** répartis en 5 catégories (vs 7 précédemment)
 - **Support multilingue** : paramètre `langue` (fr/en/all) sur les recherches
 - **Validation des entrées** : jours (1-30), max_articles (1-100)
 - **Refactoring THEMATIQUES** : import unique depuis veille_server.py
-- **Nouvelles sources** : Siècle Digital, MIT Tech Review, AI News, The Verge AI, Ars Technica, EU AI Act News
+- **Nouvelles sources** : Siècle Digital, AI News, Ars Technica, EU AI Act News, APD Belgique, Village de la Justice
 - Correction des flux RSS cassés (Human Coders, Anthropic, MS 365)
 - Meilleure gestion des erreurs (plus de `except:` silencieux)
 
@@ -842,4 +840,4 @@ Pour toute question ou problème :
 ---
 
 *Documentation MCP Veille V3 - Version 3.1*
-*Dernière mise à jour : Janvier 2026*
+*Dernière mise à jour : Mars 2026*
