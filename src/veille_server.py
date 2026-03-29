@@ -6,7 +6,7 @@ MCP Veille V3 - Serveur Principal
 
 Phase 3 : Capacités de veille complètes
 - 6 thématiques préconfigurées (NewsAPI)
-- 7 flux RSS configurés
+- 5 catégories RSS (18 flux)
 - Analyse Claude à la demande
 - Génération de rapports
 
@@ -98,12 +98,11 @@ THEMATIQUES = {
 }
 
 # =============================================================================
-# FLUX RSS CONFIGURÉS (7)
+# FLUX RSS CONFIGURÉS (5 catégories, 18 flux)
 # =============================================================================
 
 RSS_FEEDS = {
     "Actu News tech": [
-        {"name": "VentureBeat", "url": "https://venturebeat.com/feed/"},
         {"name": "BDM", "url": "https://www.blogdumoderateur.com/feed/"},
         {"name": "Siècle Digital", "url": "https://siecledigital.fr/feed/"},
         {"name": "The Gradient", "url": "https://thegradient.pub/rss/"},
@@ -113,9 +112,7 @@ RSS_FEEDS = {
         {"name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/"},
         {"name": "OpenAI Blog", "url": "https://openai.com/blog/rss.xml"},
         {"name": "DeepMind", "url": "https://deepmind.google/blog/rss.xml"},
-        {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/"},
         {"name": "AI News", "url": "https://www.artificialintelligence-news.com/feed/"},
-        {"name": "The Verge AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
     ],
     "Développeur & Open Source": [
         {"name": "GitHub Blog", "url": "https://github.blog/feed/"},
@@ -128,9 +125,11 @@ RSS_FEEDS = {
         {"name": "MS Power Platform", "url": "https://devblogs.microsoft.com/powerplatform/feed/"},
     ],
     "Réglementation": [
-        {"name": "CNIL Actualités", "url": "https://www.cnil.fr/fr/rss.xml"},
-        {"name": "EU AI Act News", "url": "https://artificialintelligenceact.eu/feed/"},
-    ]
+    {"name": "CNIL Actualités",        "url": "https://www.cnil.fr/fr/rss.xml"},
+    {"name": "EU AI Act News",          "url": "https://artificialintelligenceact.eu/fr/feed/"},
+    {"name": "APD Belgique",            "url": "https://www.autoriteprotectiondonnees.be/rss.xml"},
+    {"name": "Village de la Justice",   "url": "https://www.village-justice.com/rss.xml"},
+],
 }
 
 # =============================================================================
@@ -759,10 +758,14 @@ Utilise quand l'utilisateur demande la liste des thématiques ou ne sait pas laq
         Tool(
             name="lancer_veille_rss",
             description="""Collecte les derniers articles des flux RSS configurés.
-Catégories: "IA & Acteurs majeurs", "Développeur & Open Source", "Réglementation"
-Sources: Hugging Face, Google AI, OpenAI, Human Coders, GitHub, Hacker News, CNIL
+5 catégories disponibles:
+- "Actu News tech" : BDM, Siècle Digital, The Gradient, Developpez
+- "IA & Acteurs majeurs" : Google AI Blog, OpenAI Blog, DeepMind, AI News
+- "Développeur & Open Source" : GitHub Blog, Hugging Face Blog, Ars Technica
+- "Microsoft" : MS Azure, MS Foundry, MS Power Platform
+- "Réglementation" : CNIL, EU AI Act News, APD Belgique, Village de la Justice
 
-Exemples: "Lance la veille RSS", "Collecte les flux RSS développeur" """,
+Exemples: "Lance la veille RSS", "Collecte les flux RSS Microsoft" """,
             inputSchema={
                 "type": "object",
                 "properties": {
